@@ -3,6 +3,7 @@
 # Galaga
 
 import random
+from bullet import Bullet
 
 class Enemy():
     enemys = []
@@ -19,6 +20,6 @@ class Enemy():
             else:
                 self.xpos +=1
         
-        if self.ypos > game_height + 10:
+        if self.ypos > game_height + 20:
             self.ypos = 0
             self.xpos = random.randint(3,game_width -3)
