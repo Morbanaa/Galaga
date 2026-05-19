@@ -11,6 +11,9 @@ def main():
     game_manager.world_gen() # creates world one time
 
     while True:
+        game_manager.spawn_enemy()
+        game_manager.update_objects()
+
         game_manager.render_world()
 
         # Util
