@@ -39,11 +39,11 @@ class Game_Manager():
                 else:
                     row.append(" ")
             self.game_map.append(row)
-    
+
     def spawn_enemy(self):
         Enemy.timer += 1
 
-        if Enemy.timer > 25:
+        if Enemy.timer > 45:
             Enemy.timer = 0
             Enemy.enemys.append(Enemy(0,random.randint(3,self.game_width -3)))
 
@@ -51,7 +51,14 @@ class Game_Manager():
         self.player.update(self.game_map)
         for bullet in Bullet.bullets:
             bullet.update()
+
+        # Enemys
         for enemy in Enemy.enemys:
+            for bullet in Bullet.bullets:
+                if bullet.ypos == enemy.ypos and abs(bullet.xpos - enemy.xpos) < 2:
+                    Enemy.enemys.remove(enemy)
+                    Bullet.bullets.remove(bullet)
+                    break
             enemy.update(self.player,self.game_height,self.game_width)
 
     def render_world(self):
