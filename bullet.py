@@ -1,1 +1,4 @@
-ECHO is on.
+class Bullet():
+    def __init__(self,ypos,xpos):
+        self.ypos = ypos
+        self.xpos = xpos
