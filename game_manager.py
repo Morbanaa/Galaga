@@ -55,7 +55,7 @@ class Game_Manager():
         # Enemys
         for enemy in Enemy.enemys:
             for bullet in Bullet.bullets:
-                if bullet.ypos == enemy.ypos and abs(bullet.xpos - enemy.xpos) < 2:
+                if abs(bullet.ypos - enemy.ypos) < 2 and abs(bullet.xpos - enemy.xpos) < 2:
                     Enemy.enemys.remove(enemy)
                     Bullet.bullets.remove(bullet)
                     break
