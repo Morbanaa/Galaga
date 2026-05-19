@@ -10,11 +10,13 @@ def main():
     game_manager = Game_Manager(35,50)
     game_manager.world_gen() # creates world one time
 
+
     while True:
         game_manager.spawn_enemy()
         game_manager.update_objects()
 
         game_manager.render_world()
+        game_manager.game_over()
 
         # Util
         time.sleep(game_speed)
