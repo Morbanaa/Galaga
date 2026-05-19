@@ -6,10 +6,11 @@ from bullet import Bullet
 import keyboard
 
 class Player():
-    def __init__(self,ypos,xpos,ammo):
+    def __init__(self,ypos,xpos,ammo,health):
         self.ypos = ypos
         self.xpos = xpos
         self.ammo = ammo
+        self.health = health
         self.timer = 7
 
     def update(self,game_map):
