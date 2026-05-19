@@ -18,11 +18,17 @@ DARK_GRAY  = '\033[90m'
 # Reset Color
 RESET = '\033[0m'
 
+import random
+from player import Player
+from enemy import Enemy
+from bullet import Bullet
+
 class Game_Manager():
     def __init__(self,game_height,game_width):
         self.game_height = game_height
         self.game_width = game_width
         self.game_map = []
+        self.player = Player(self.game_height -3,self.game_width//2,100)
 
     def world_gen(self):
         for y in range (self.game_height):
@@ -33,14 +39,51 @@ class Game_Manager():
                 else:
                     row.append(" ")
             self.game_map.append(row)
+    
+    def spawn_enemy(self):
+        Enemy.timer += 1
+
+        if Enemy.timer > 25:
+            Enemy.timer = 0
+            Enemy.enemys.append(Enemy(0,random.randint(3,self.game_width -3)))
 
     def update_objects(self):
-        pass
+        self.player.update(self.game_map)
+        for bullet in Bullet.bullets:
+            bullet.update()
+        for enemy in Enemy.enemys:
+            enemy.update(self.player,self.game_height,self.game_width)
 
     def render_world(self):
+        print(f"Ammo: {self.player.ammo:<100}")
         for y in range(self.game_height):
             for x in range(self.game_width):
-                print(f"{DARK_GRAY}{self.game_map[y][x]}{RESET}",end="")
+
+                # Render Bullets
+                bullet_here = False
+                for bullet in Bullet.bullets:
+                    if bullet.ypos == y and bullet.xpos == x:
+                        bullet_here = True
+                        print(f"{"."}",end="")
+                        break
+                if bullet_here:
+                    continue
+
+                # Render Enemys
+                enemy_here = False
+                for enemy in Enemy.enemys:
+                    if enemy.ypos == y and enemy.xpos == x:
+                        enemy_here = True
+                        print(f"{RED}{"V"}{RESET}",end="")
+                        break
+                if enemy_here:
+                    continue
+
+                # Render Player
+                if y == self.player.ypos and x == self.player.xpos:
+                    print(f"{GREEN}M{RESET}",end="")
+                else:
+                    print(f"{DARK_GRAY}{self.game_map[y][x]}{RESET}",end="")
             print()
 
     def clear_move_cursor(self):
