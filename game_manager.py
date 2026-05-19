@@ -18,6 +18,7 @@ DARK_GRAY  = '\033[90m'
 # Reset Color
 RESET = '\033[0m'
 
+import sys
 import random
 from player import Player
 from enemy import Enemy
@@ -28,7 +29,7 @@ class Game_Manager():
         self.game_height = game_height
         self.game_width = game_width
         self.game_map = []
-        self.player = Player(self.game_height -3,self.game_width//2,100)
+        self.player = Player(self.game_height -3,self.game_width//2,25,100)
 
     def world_gen(self):
         for y in range (self.game_height):
@@ -46,9 +47,22 @@ class Game_Manager():
         if Enemy.timer > 45:
             Enemy.timer = 0
             Enemy.enemys.append(Enemy(0,random.randint(3,self.game_width -3)))
+    
+    def game_over(self):
+        if self.player.health <= 0:
+            print("Game Over!!!\n\n")
+            sys.exit()
 
     def update_objects(self):
+        # Player
+        for enemy in Enemy.enemys:
+            if enemy.ypos == self.player.ypos and enemy.xpos == self.player.xpos:
+                self.player.health -= 20
+            if self.player.health < 0:
+                self.player.health = 0
         self.player.update(self.game_map)
+        
+        # Bullet
         for bullet in Bullet.bullets:
             bullet.update()
 
@@ -62,7 +76,7 @@ class Game_Manager():
             enemy.update(self.player,self.game_height,self.game_width)
 
     def render_world(self):
-        print(f"Ammo: {self.player.ammo:<100}")
+        print(f"Ammo: {self.player.ammo:<30} Health: {self.player.health:<50}")
         for y in range(self.game_height):
             for x in range(self.game_width):
 
